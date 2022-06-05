@@ -1,0 +1,1 @@
+insert into tb_contato(nome, email)values('Maria','maria@gmail.com')
