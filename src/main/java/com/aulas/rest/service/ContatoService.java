@@ -1,5 +1,6 @@
 package com.aulas.rest.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -7,7 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 
 import com.aulas.rest.entity.Contato;
 import com.aulas.rest.repository.ContatoRepository;
@@ -20,6 +20,10 @@ public class ContatoService {
 	public Contato salvar(Contato contato) {
 	  return repository.save(contato);
     }
+	
+	public List<Contato> pesquisarTodos(){
+		return repository.findAll();
+	}
 	
 	public Contato pesquisar(Long id) {
 	   Optional<Contato> obj = repository.findById(id);	

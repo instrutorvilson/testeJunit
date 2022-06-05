@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;ContatoControllerTest.java&apos; to &apos;TesteMockito/src/test/java/com.aulas.rest&apos;&#x0D;&#x0A;- Original project: &apos;IntroducaoRestAPI&apos;&#x0D;&#x0A;- Destination element: &apos;TesteMockito/src/test/java/com.aulas.rest&apos;&#x0D;&#x0A;- Original element: &apos;com.aulas.rest.ContatoControllerTest.java&apos;" description="Copy compilation unit" destination="=TesteMockito/src\/test\/java=/optional=/true=/=/maven.pomderived=/true=/=/test=/true=/&lt;com.aulas.rest" element1="/src\/test\/java=/optional=/true=/=/maven.pomderived=/true=/=/test=/true=/&lt;com.aulas.rest{ContatoControllerTest.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1654450637715" units="1" version="1.0"/>
+</session>
