@@ -32,12 +32,15 @@ public class ContatoService {
 	}
 	
 	public void delete(Long id) {
-		try {
+		this.pesquisar(id);
 		repository.deleteById(id);	
-		}
-		catch(EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException("Contato inexistente");
-		}
 	}
+	
+	public Contato alterar(Long idcontato, Contato contato) {		
+		Optional<Contato> obj = repository.findById(idcontato);	
+		Contato ct = obj.orElseThrow(() -> new EntityNotFoundException("Contato inexistente"));
+    	ct = contato;		
+		return repository.save(ct);
+	}	
 	
 } 

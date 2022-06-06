@@ -2,8 +2,10 @@ package com.aulas.rest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -56,6 +58,8 @@ public class ContatoControllerTest {
 		Mockito.when(service.pesquisar(idNaoExistente)).thenThrow(EntityNotFoundException.class);
 		Mockito.when(service.pesquisarTodos()).thenReturn(lista);
 		Mockito.when(service.salvar(any())).thenReturn(contatoExistente);
+		Mockito.when(service.alterar(eq(idExistente), any())).thenReturn(contatoExistente);
+		Mockito.when(service.alterar(eq(idNaoExistente), any())).thenThrow(EntityNotFoundException.class);
 	}
 
 	@Test
@@ -89,6 +93,28 @@ public class ContatoControllerTest {
 		        .accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isCreated());
+	}
+	
+	@Test
+	void deveRetornarStatus200QuandoAlterarContatoExistenteComSucesso() throws Exception {
+		String jsonBody = objectMapper.writeValueAsString(contatoExistente);
+		ResultActions result = mockMvc.perform(put("/contato/{idcontato}", idExistente)
+			   .content(jsonBody)
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isOk());		       
+	}
+	
+	@Test
+	void deveRetornarStatus404QuandoAlterarContatoInexistente() throws Exception {
+		String jsonBody = objectMapper.writeValueAsString(contatoNovo);
+		ResultActions result = mockMvc.perform(put("/contato/{idcontato}", idNaoExistente)
+			   .content(jsonBody)
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isNotFound());		       
 	}
 
 }
