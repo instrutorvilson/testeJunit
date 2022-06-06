@@ -3,6 +3,7 @@ package com.aulas.rest;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -60,6 +61,8 @@ public class ContatoControllerTest {
 		Mockito.when(service.salvar(any())).thenReturn(contatoExistente);
 		Mockito.when(service.alterar(eq(idExistente), any())).thenReturn(contatoExistente);
 		Mockito.when(service.alterar(eq(idNaoExistente), any())).thenThrow(EntityNotFoundException.class);
+		Mockito.doNothing().when(service).delete(idExistente);
+		Mockito.doThrow(EntityNotFoundException.class).when(service).delete(idNaoExistente);
 	}
 
 	@Test
@@ -117,4 +120,11 @@ public class ContatoControllerTest {
 		result.andExpect(status().isNotFound());		       
 	}
 
+	@Test
+	void deveRetornarNadaQuandoExcluirContatoExistente() throws Exception {
+		 ResultActions result = mockMvc.perform(delete("/contato/{idcontato}", idExistente)
+			 			               .accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isNoContent());		       
+	}
 }
