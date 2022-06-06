@@ -22,68 +22,71 @@ import com.aulas.rest.service.ContatoService;
 
 @ExtendWith(SpringExtension.class)
 public class ContatoServiceTest {
-    private Long idExistente;
-    private Long idNaoExistente;
-    private Contato contato;
-    private List<Contato> lista;
-    
+	private Long idExistente;
+	private Long idNaoExistente;
+	private Contato contato;
+	private List<Contato> lista;
+
 	@InjectMocks
 	private ContatoService service;
-	
+
 	@Mock
 	private ContatoRepository repository;
-	
+
 	@BeforeEach
 	void setup() {
 		idExistente = 1L;
-		idNaoExistente = 1000L;
-		contato = new Contato(1L,"Maria","maria@teste");
+		idNaoExistente = 2L;
+		contato = new Contato(1L, "Maria", "maria@teste");
 		lista = new ArrayList<>();
-		
-		/*Comportamento simulado usando mockito*/
+
 		Mockito.doNothing().when(repository).deleteById(idExistente);
-		
 		Mockito.doThrow(EntityNotFoundException.class).when(repository).deleteById(idNaoExistente);
-		
+
 		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(contato);
-		
+
 		Mockito.when(repository.findById(idExistente)).thenReturn(Optional.of(contato));
+		Mockito.doThrow(EntityNotFoundException.class).when(repository).findById(idNaoExistente);
+
 		Mockito.when(repository.findAll()).thenReturn(lista);
-	}	
-	
+	}
+
 	@Test
 	public void naoFazNadaDeleteQuandoIdExiste() {
 		Assertions.assertDoesNotThrow(() -> {
 			service.delete(idExistente);
-		});	
-		
+		});
+
 		Mockito.verify(repository, Mockito.times(1)).deleteById(idExistente);
 	}
 	
-	@Test
-	public void lancaEntityNotFoundExcpetionQuandoDeleteIdNaoExistente() {
-		Assertions.assertThrows(EntityNotFoundException.class, () -> {
-			service.delete(idNaoExistente);
-		});			
-		Mockito.verify(repository, Mockito.times(1)).deleteById(idNaoExistente);
-	}
-	
+
 	@Test
 	public void retornaContatoAoSalvar() {
-	    Assertions.assertNotNull(service.salvar(contato));
-	    Mockito.verify(repository, Mockito.times(1)).save(contato);
+		Assertions.assertNotNull(service.salvar(contato));
+		Mockito.verify(repository, Mockito.times(1)).save(contato);
 	}
-	
+
 	@Test
 	public void retornaContatoAoPesquisarPorIdExistente() {
-	    Assertions.assertNotNull(service.pesquisar(idExistente));
-	    Mockito.verify(repository, Mockito.times(1)).findById(idExistente);
+		Assertions.assertNotNull(service.pesquisar(idExistente));
+		Mockito.verify(repository, Mockito.times(1)).findById(idExistente);
 	}
-	
-	//@Test
-		void retornaNaoNulQuandoConsultaTodos() {
-			List<Contato> listaContato = service.pesquisarTodos();
-			Assertions.assertNotNull(listaContato);
-		}	
-	
+
+	@Test
+	public void lancaEntityNotFoundExceptionAoPesquisarPorIdInexistente() {
+		Assertions.assertThrows(EntityNotFoundException.class, () -> {
+			service.delete(idNaoExistente);
+		});
+		Mockito.verify(repository, Mockito.times(1)).findById(idNaoExistente);
+	}
+
+	@Test
+	void retornaListaNaoNullQuandoConsultaTodos() {
+		List<Contato> listaContato = service.pesquisarTodos();
+		Assertions.assertNotNull(listaContato);
+		
+		Mockito.verify(repository).findAll();
+	}
+
 }
