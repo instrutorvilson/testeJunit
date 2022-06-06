@@ -1,5 +1,7 @@
 package com.aulas.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,6 +25,7 @@ public class ContatoServiceTest {
     private Long idExistente;
     private Long idNaoExistente;
     private Contato contato;
+    private List<Contato> lista;
     
 	@InjectMocks
 	private ContatoService service;
@@ -35,6 +38,8 @@ public class ContatoServiceTest {
 		idExistente = 1L;
 		idNaoExistente = 1000L;
 		contato = new Contato(1L,"Maria","maria@teste");
+		lista = new ArrayList<>();
+		
 		/*Comportamento simulado usando mockito*/
 		Mockito.doNothing().when(repository).deleteById(idExistente);
 		
@@ -43,6 +48,7 @@ public class ContatoServiceTest {
 		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(contato);
 		
 		Mockito.when(repository.findById(idExistente)).thenReturn(Optional.of(contato));
+		Mockito.when(repository.findAll()).thenReturn(lista);
 	}	
 	
 	@Test
@@ -73,5 +79,11 @@ public class ContatoServiceTest {
 	    Assertions.assertNotNull(service.pesquisar(idExistente));
 	    Mockito.verify(repository, Mockito.times(1)).findById(idExistente);
 	}
+	
+	//@Test
+		void retornaNaoNulQuandoConsultaTodos() {
+			List<Contato> listaContato = service.pesquisarTodos();
+			Assertions.assertNotNull(listaContato);
+		}	
 	
 }
