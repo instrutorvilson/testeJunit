@@ -19,7 +19,7 @@ import com.aulas.rest.repository.ContatoRepository;
 import com.aulas.rest.service.ContatoService;
 
 @SpringBootTest
-public class ContatoTesteIntegration {
+public class ContatoTesteIntegrationServiceRepo {
 	private Long idExistente;
     private Long idNaoExistente;
     private Contato contato;
