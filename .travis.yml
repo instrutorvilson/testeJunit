@@ -12,6 +12,6 @@ deploy:
   provider: script
   script:
     docker tag testemockito:v1 $DOCKERHUB_USER/testemockito:v1;
-    docker push $DOCKERHUB_USER/testemockito;
+    docker push $DOCKERHUB_USER/testemockito:v1;
   on:
     branch: main
