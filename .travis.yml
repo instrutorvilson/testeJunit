@@ -1,5 +1,18 @@
 language: java
 jdk:
-  - openjdk17
+  - openjdk11
 before_install:
+  - cd backend
   - chmod +x mvnw
+  - ./mvnw clean package
+script:
+  - docker build -t testemockito:v1 .
+before_deploy:
+  echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USER" --password-stdin
+deploy:
+  provider: script
+  script:
+    docker tag testemockito:v1 $DOCKERHUB_USER/testemockito:v1;
+    docker push $DOCKERHUB_USER/testemockito;
+  on:
+    branch: main
