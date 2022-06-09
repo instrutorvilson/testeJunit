@@ -1,0 +1,1 @@
+[![Build Status](https://app.travis-ci.com/instrutorvilson/testeJunit.svg?branch=main)](https://app.travis-ci.com/instrutorvilson/testeJunit)
